@@ -1,5 +1,6 @@
 package infosecadventures.allsafe
 
+import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
+import infosecadventures.allsafe.utils.SecurityUtils
 import infosecadventures.allsafe.utils.SnackUtil
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +19,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if ((applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) == 0 &&
+                SecurityUtils.isDeveloperOptionsEnabled(this)) {
+            finishAffinity()
+            return
+        }
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE)
