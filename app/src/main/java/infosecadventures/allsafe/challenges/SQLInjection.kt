@@ -27,7 +27,8 @@ class SQLInjection : Fragment() {
         val login: Button = view.findViewById(R.id.login)
         login.setOnClickListener {
 
-            val cursor: Cursor = db.rawQuery("select * from user where username = '" + username.text.toString() + "' and password = '" + md5(password.text.toString()) + "'", null)
+            val query = "select * from user where username = ? and password = ?"
+            val cursor: Cursor = db.rawQuery(query, arrayOf(username.text.toString(), md5(password.text.toString())))
             val data = StringBuilder()
             if (cursor.count > 0) {
                 cursor.moveToFirst()
